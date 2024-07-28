@@ -138,28 +138,70 @@ for (String i : sites)
 
 先入后出
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### 队列（queue）
 
 先入先出
+
+### String 类
+
+> 类似数组
+
+```java
+// 创建
+String s1 = "Runoob";              // String 直接创建
+String s2 = "Runoob";              // String 直接创建
+String s3 = s1; 
+s1 == s2 == s3;                     // 相同引用
+String s4 = new String("Runoob");   // String 对象创建
+String s5 = new String("Runoob");   // String 对象创建
+s4 != s5;                           // 不同对象
+
+// 连接字符串
+string1.concat(string2);
+string1 + string2 + "!";
+
+// 格式化字符串
+String fs;
+fs = String.format("浮点型变量的值为 " +
+                   "%f, 整型变量的值为 " +
+                   " %d, 字符串变量的值为 " +
+                   " %s", floatVar, intVar, stringVar);
+
+// 比较两个字符串的内容是否相同。
+boolean equals(Object anObject);
+    
+// 按字典顺序比较两个字符串
+int compareTo(String anotherString);
+int compareToIgnoreCase(String str); // 不考虑大小写
+    
+// 返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的
+String replace(char oldChar, char newChar);
+
+char[] toCharArray();
+```
+
+![img](https://www.runoob.com/wp-content/uploads/2013/12/java-string-1-2020-12-01.png)
+
+**注意:**String 类是不可改变的，所以你一旦创建了 String 对象，那它的值就无法改变了。改变实际上是创建了一个新对象，会增加时间和空间复杂度。
+
+如果需要对字符串做很多修改，那么应该选择使用 [StringBuffer & StringBuilder 类](https://www.runoob.com/java/java-stringbuffer.html)。
+
+* StringBuilder 相较于 StringBuffer 有速度优势
+* StringBuilder 的方法不是线程安全的
+
+```java
+public class RunoobTest{
+    public static void main(String args[]){
+        StringBuilder sb = new StringBuilder(10);
+        sb.append("Runoob.."); 
+        System.out.println(sb); // Runoob..
+        sb.append("!");
+        System.out.println(sb); // Runoob..!
+        sb.insert(8, "Java");
+        System.out.println(sb); // Runoob..Java!
+        sb.delete(5,8);
+        System.out.println(sb); // RunooJava!
+    }
+}
+```
+
