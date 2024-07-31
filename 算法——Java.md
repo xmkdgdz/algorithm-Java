@@ -138,6 +138,35 @@ for (String i : sites)
 
 先入后出
 
+Java标准库提供了`java.util.Stack`类来实现栈，但在实际开发中，我们更推荐使用`java.util.Deque`接口及其实现类`java.util.ArrayDeque`和`java.util.LinkedList`来实现栈。
+
+`ArrayDeque`是一个基于数组的双端队列
+
+`LinkedList`是一个基于链表的双端队列
+
+在大多数情况下，`ArrayDeque`是更好的选择，因为它在内存使用和性能上通常优于`LinkedList`。然而，如果你需要在列表中间频繁插入和删除元素，`LinkedList`可能是一个更好的选择。
+
+```java
+// 使用ArrayDeque实现栈
+Deque<Integer> stack = new ArrayDeque<>();
+stack.push(1);
+stack.push(2);
+stack.push(3);
+System.out.println(stack.pop()); // 输出3
+System.out.println(stack.pop()); // 输出2
+System.out.println(stack.pop()); // 输出1
+
+// 使用LinkedList实现栈
+Deque<Integer> stack2 = new LinkedList<>();
+stack2.push(1);
+stack2.push(2);
+stack2.push(3);
+System.out.println(stack2.pop()); // 输出3
+System.out.println(stack2.pop()); // 输出2
+System.out.println(stack2.pop()); // 输出1
+```
+
+
 ### 队列（queue）
 
 先入先出
