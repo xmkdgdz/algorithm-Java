@@ -149,27 +149,54 @@ Java标准库提供了`java.util.Stack`类来实现栈，但在实际开发中�
 ```java
 // 使用ArrayDeque实现栈
 Deque<Integer> stack = new ArrayDeque<>();
-stack.push(1);
-stack.push(2);
-stack.push(3);
-System.out.println(stack.pop()); // 输出3
-System.out.println(stack.pop()); // 输出2
-System.out.println(stack.pop()); // 输出1
 
 // 使用LinkedList实现栈
 Deque<Integer> stack2 = new LinkedList<>();
-stack2.push(1);
-stack2.push(2);
-stack2.push(3);
-System.out.println(stack2.pop()); // 输出3
-System.out.println(stack2.pop()); // 输出2
-System.out.println(stack2.pop()); // 输出1
 ```
 
+|          |                        |
+| -------- | ---------------------- |
+| `push()` | 元素入栈（添加至栈顶） |
+| `pop()`  | 栈顶元素出栈           |
+| `peek()` | 访问栈顶元素           |
 
 ### 队列（queue）
 
 先入先出
+
+| 抛出异常  | 返回特殊值(用这个) |
+| :-------- | ------------------ |
+| add(e)    | offer(e)           |
+| remove()  | poll()             |
+| element() | peek()             |
+
+### 双向队列
+
+```java
+/* 初始化双向队列 */
+Deque<Integer> deque = new LinkedList<>();
+
+/* 元素入队 */
+deque.offerLast(2);   // 添加至队尾
+deque.offerLast(5);
+deque.offerLast(4);
+deque.offerFirst(3);  // 添加至队首
+deque.offerFirst(1);
+
+/* 访问元素 */
+int peekFirst = deque.peekFirst();  // 队首元素
+int peekLast = deque.peekLast();    // 队尾元素
+
+/* 元素出队 */
+int popFirst = deque.pollFirst();  // 队首元素出队
+int popLast = deque.pollLast();    // 队尾元素出队
+
+/* 获取双向队列的长度 */
+int size = deque.size();
+
+/* 判断双向队列是否为空 */
+boolean isEmpty = deque.isEmpty();
+```
 
 ### String 类
 
@@ -233,4 +260,6 @@ public class RunoobTest{
     }
 }
 ```
+
+### 哈希表
 
