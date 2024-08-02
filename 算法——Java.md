@@ -188,8 +188,8 @@ int peekFirst = deque.peekFirst();  // 队首元素
 int peekLast = deque.peekLast();    // 队尾元素
 
 /* 元素出队 */
-int popFirst = deque.pollFirst();  // 队首元素出队
-int popLast = deque.pollLast();    // 队尾元素出队
+int pollFirst = deque.pollFirst();  // 队首元素出队
+int pollLast = deque.pollLast();    // 队尾元素出队
 
 /* 获取双向队列的长度 */
 int size = deque.size();
