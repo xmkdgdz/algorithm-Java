@@ -33,6 +33,71 @@ for (int i : array)
 
 > 插入和删除需要改变后面的所有元素
 
+### String 类
+
+> 类似数组
+
+```java
+// 创建
+String s1 = "Runoob";              // String 直接创建
+String s2 = "Runoob";              // String 直接创建
+String s3 = s1; 
+s1 == s2 == s3;                     // 相同引用
+String s4 = new String("Runoob");   // String 对象创建
+String s5 = new String("Runoob");   // String 对象创建
+s4 != s5;                           // 不同对象
+
+// 连接字符串
+string1.concat(string2);
+string1 + string2 + "!";
+
+// 格式化字符串
+String fs;
+fs = String.format("浮点型变量的值为 " +
+                   "%f, 整型变量的值为 " +
+                   " %d, 字符串变量的值为 " +
+                   " %s", floatVar, intVar, stringVar);
+
+// 比较两个字符串的内容是否相同。
+boolean equals(Object anObject);
+    
+// 按字典顺序比较两个字符串
+int compareTo(String anotherString);
+int compareToIgnoreCase(String str); // 不考虑大小写
+    
+// 返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的
+String replace(char oldChar, char newChar);
+
+char[] toCharArray();
+```
+
+![img](https://www.runoob.com/wp-content/uploads/2013/12/java-string-1-2020-12-01.png)
+
+**注意:**String 类是不可改变的，所以你一旦创建了 String 对象，那它的值就无法改变了。改变实际上是创建了一个新对象，会增加时间和空间复杂度。
+
+如果需要对字符串做很多修改，那么应该选择使用 [StringBuffer & StringBuilder 类](https://www.runoob.com/java/java-stringbuffer.html)。
+
+* StringBuilder 相较于 StringBuffer 有速度优势
+* StringBuilder 的方法不是线程安全的
+
+```java
+public class RunoobTest{
+    public static void main(String args[]){
+        StringBuilder sb = new StringBuilder(10);
+        sb.append("Runoob.."); 
+        System.out.println(sb); // Runoob..
+        sb.append("!");
+        System.out.println(sb); // Runoob..!
+        sb.insert(8, "Java");
+        System.out.println(sb); // Runoob..Java!
+        sb.delete(5,8);
+        System.out.println(sb); // RunooJava!
+    }
+}
+```
+
+### 
+
 ### 链表
 
 ```java
@@ -170,7 +235,7 @@ Deque<Integer> stack2 = new LinkedList<>();
 | remove()  | poll()             |
 | element() | peek()             |
 
-### 双向队列
+#### 双向队列(Deque)
 
 ```java
 /* 初始化双向队列 */
@@ -198,68 +263,40 @@ int size = deque.size();
 boolean isEmpty = deque.isEmpty();
 ```
 
-### String 类
+#### 优先队列(Priority Queue)
 
-> 类似数组
-
-```java
-// 创建
-String s1 = "Runoob";              // String 直接创建
-String s2 = "Runoob";              // String 直接创建
-String s3 = s1; 
-s1 == s2 == s3;                     // 相同引用
-String s4 = new String("Runoob");   // String 对象创建
-String s5 = new String("Runoob");   // String 对象创建
-s4 != s5;                           // 不同对象
-
-// 连接字符串
-string1.concat(string2);
-string1 + string2 + "!";
-
-// 格式化字符串
-String fs;
-fs = String.format("浮点型变量的值为 " +
-                   "%f, 整型变量的值为 " +
-                   " %d, 字符串变量的值为 " +
-                   " %s", floatVar, intVar, stringVar);
-
-// 比较两个字符串的内容是否相同。
-boolean equals(Object anObject);
-    
-// 按字典顺序比较两个字符串
-int compareTo(String anotherString);
-int compareToIgnoreCase(String str); // 不考虑大小写
-    
-// 返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的
-String replace(char oldChar, char newChar);
-
-char[] toCharArray();
-```
-
-![img](https://www.runoob.com/wp-content/uploads/2013/12/java-string-1-2020-12-01.png)
-
-**注意:**String 类是不可改变的，所以你一旦创建了 String 对象，那它的值就无法改变了。改变实际上是创建了一个新对象，会增加时间和空间复杂度。
-
-如果需要对字符串做很多修改，那么应该选择使用 [StringBuffer & StringBuilder 类](https://www.runoob.com/java/java-stringbuffer.html)。
-
-* StringBuilder 相较于 StringBuffer 有速度优势
-* StringBuilder 的方法不是线程安全的
+基于堆（Heap）实现
 
 ```java
-public class RunoobTest{
-    public static void main(String args[]){
-        StringBuilder sb = new StringBuilder(10);
-        sb.append("Runoob.."); 
-        System.out.println(sb); // Runoob..
-        sb.append("!");
-        System.out.println(sb); // Runoob..!
-        sb.insert(8, "Java");
-        System.out.println(sb); // Runoob..Java!
-        sb.delete(5,8);
-        System.out.println(sb); // RunooJava!
-    }
-}
+/* 初始化堆 */
+// 初始化小顶堆
+Queue<Integer> minHeap = new PriorityQueue<>();
+// 初始化大顶堆（使用 lambda 表达式修改 Comparator 即可）
+Queue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+
+/* 元素入堆 */
+maxHeap.offer(1);
+maxHeap.offer(3);
+maxHeap.offer(2);
+maxHeap.offer(5);
+maxHeap.offer(4);
+
+/* 获取堆顶元素 */
+int peek = maxHeap.peek(); // 5
+
+/* 堆顶元素出堆 */
+// 出堆元素会形成一个从大到小的序列
+peek = maxHeap.poll(); // 5
+peek = maxHeap.poll(); // 4
+peek = maxHeap.poll(); // 3
+peek = maxHeap.poll(); // 2
+peek = maxHeap.poll(); // 1
+
+/* 获取堆大小 */
+int size = maxHeap.size();
+
+/* 判断堆是否为空 */
+boolean isEmpty = maxHeap.isEmpty();
 ```
 
 ### 哈希表
-
