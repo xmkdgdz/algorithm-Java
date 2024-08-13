@@ -1,8 +1,8 @@
 # 算法——Java
 
-## 线性数据结构
+![线性数据结构与非线性数据结构](https://www.hello-algo.com/chapter_data_structure/classification_of_data_structure.assets/classification_logic_structure.png)
 
-### 数组（array）
+## 数组（array）
 
 ```java
 // 初始化
@@ -98,7 +98,7 @@ public class RunoobTest{
 
 ### 
 
-### 链表
+## 链表
 
 ```java
 /* 链表节点类 */
@@ -122,9 +122,22 @@ class ListNode {
 
 **所有数据结构都是基于数组、链表或二者的组合实现的**。
 
-### 列表（Lists）
+## 列表（Lists）
 
 列表可以基于链表或数组实现
+
+```java
+/* List 转换为数组 */
+Object[] array = list.toArray();
+String[] stringArray = list.toArray(new String[0]);
+
+/* 不能直接转化为 int[]，只能遍历 */
+int[] array = new int[list.size()];
+// 手动遍历赋值
+for (int i = 0; i < list.size(); i++) {
+    array[i] = list.get(i);
+}
+```
 
 **ArrayList:**
 
@@ -199,7 +212,7 @@ for (String i : sites)
 - **优点：** 插入和删除元素高效，迭代器性能好。
 - **缺点：** 随机访问相对较慢。
 
-### 栈（stack）
+## 栈（stack）
 
 先入后出
 
@@ -225,7 +238,7 @@ Deque<Integer> stack2 = new LinkedList<>();
 | `pop()`  | 栈顶元素出栈           |
 | `peek()` | 访问栈顶元素           |
 
-### 队列（queue）
+## 队列（queue）
 
 先入先出
 
@@ -235,7 +248,7 @@ Deque<Integer> stack2 = new LinkedList<>();
 | remove()  | poll()             |
 | element() | peek()             |
 
-#### 双向队列(Deque)
+### 双向队列(Deque)
 
 ```java
 /* 初始化双向队列 */
@@ -263,7 +276,7 @@ int size = deque.size();
 boolean isEmpty = deque.isEmpty();
 ```
 
-#### 优先队列(Priority Queue)
+### 优先队列(Priority Queue)
 
 基于堆（Heap）实现
 
@@ -299,4 +312,87 @@ int size = maxHeap.size();
 boolean isEmpty = maxHeap.isEmpty();
 ```
 
-### 哈希表
+## 哈希表
+
+## 树
+
+### 二叉树
+
+```java
+/* 二叉树节点类 */
+class TreeNode {
+    int val;         // 节点值
+    TreeNode left;   // 左子节点引用
+    TreeNode right;  // 右子节点引用
+    TreeNode(int x) { val = x; }
+}
+```
+
+![完美二叉树](https://www.hello-algo.com/chapter_tree/binary_tree.assets/perfect_binary_tree.png)
+
+![完全二叉树](https://www.hello-algo.com/chapter_tree/binary_tree.assets/complete_binary_tree.png)
+
+![完满二叉树](https://www.hello-algo.com/chapter_tree/binary_tree.assets/full_binary_tree.png)
+
+![平衡二叉树](https://www.hello-algo.com/chapter_tree/binary_tree.assets/balanced_binary_tree.png)
+
+**层序遍历**：从顶部到底部逐层遍历二叉树，并在每一层按照从左到右的顺序访问节点。是广度优先搜索（breadth-first search, BFS）
+
+广度优先遍历通常借助“队列”实现
+
+```java
+/* 层序遍历 */
+List<Integer> levelOrder(TreeNode root) {
+    // 初始化队列，加入根节点
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(root);
+    // 初始化一个列表，用于保存遍历序列
+    List<Integer> list = new ArrayList<>();
+    while (!queue.isEmpty()) {
+        TreeNode node = queue.poll(); // 队列出队
+        list.add(node.val);           // 保存节点值
+        if (node.left != null)
+            queue.offer(node.left);   // 左子节点入队
+        if (node.right != null)
+            queue.offer(node.right);  // 右子节点入队
+    }
+    return list;
+}
+```
+
+**前序、中序和后序遍历**：绕着整棵二叉树的外围“走”一圈，“先走到尽头，再回溯继续”。是深度优先搜索（depth-first search, DFS）
+
+深度优先搜索通常基于递归实现
+
+```java
+/* 前序遍历 */
+void preOrder(TreeNode root) {
+    if (root == null)
+        return;
+    // 访问优先级：根节点 -> 左子树 -> 右子树
+    list.add(root.val);
+    preOrder(root.left);
+    preOrder(root.right);
+}
+
+/* 中序遍历 */
+void inOrder(TreeNode root) {
+    if (root == null)
+        return;
+    // 访问优先级：左子树 -> 根节点 -> 右子树
+    inOrder(root.left);
+    list.add(root.val);
+    inOrder(root.right);
+}
+
+/* 后序遍历 */
+void postOrder(TreeNode root) {
+    if (root == null)
+        return;
+    // 访问优先级：左子树 -> 右子树 -> 根节点
+    postOrder(root.left);
+    postOrder(root.right);
+    list.add(root.val);
+}
+```
+
