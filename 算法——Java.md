@@ -507,3 +507,6 @@ void remove(int num) {
 **中序遍历有序**
 
 ![二叉搜索树的中序遍历序列](https://www.hello-algo.com/chapter_tree/binary_search_tree.assets/bst_inorder_traversal.png)
+
+
+
