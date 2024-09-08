@@ -9,21 +9,27 @@
 int[] array = new int[5]; // 默认值为 0
 // 元素赋值
 array[0] = 2;
-array[1] = 3;
-array[2] = 1;
-array[3] = 0;
-array[4] = 2;
 
 // 初始化
 int[] array = {2, 3, 1, 0, 2};
 
-
 // 遍历数组
-
 // 通过索引遍历数组
 for (int i = 0; i < array.length; i++)
 // 直接遍历数组元素
 for (int i : array)
+    
+// 复制数组
+int[] copy = Arrays.copyOf(numbers, numbers.length);  // 复制整个数组
+int[] partialCopy = Arrays.copyOfRange(numbers, 1, 4);  // 复制部分数组 [1, 4)
+
+// 填充数组
+Arrays.fill(array, 0);  // 用 0 填充整个数组
+Arrays.fill(array, 1, 4, 5);  // 从索引 1 到 4（不包括4）填充 5
+
+// 排序数组
+Arrays.sort(array);  // 对数组进行升序排序
+Arrays.sort(array, Collections.reverseOrder()); // 降序排序
 ```
 
 内存地址连续，可以存储固定大小的相同类型的元素
