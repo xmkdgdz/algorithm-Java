@@ -98,11 +98,10 @@ public class RunoobTest{
         System.out.println(sb); // Runoob..Java!
         sb.delete(5,8);
         System.out.println(sb); // RunooJava!
+        sb.deleteCharAt(2); // 删除某个
     }
 }
 ```
-
-### 
 
 ## 链表
 
