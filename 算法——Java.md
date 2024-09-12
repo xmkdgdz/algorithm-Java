@@ -556,6 +556,137 @@ for (String val: map.values()) {
 map.clear();  // 移除所有的键值对
 ```
 
+## 搜索
+
+### 二分查找
+
+```java
+/* 二分查找（双闭区间） */
+int binarySearch(int[] nums, int target) {
+    // 初始化双闭区间 [0, n-1] ，即 i, j 分别指向数组首元素、尾元素
+    int i = 0, j = nums.length - 1;
+    // 循环，当搜索区间为空时跳出（当 i > j 时为空）
+    while (i <= j) {
+        int m = i + (j - i) / 2; // 计算中点索引 m，不使用 (i+j)/2 因为 i+j 可能会超出 int 类型的取值范围
+        if (nums[m] < target) // 此情况说明 target 在区间 [m+1, j] 中
+            i = m + 1;
+        else if (nums[m] > target) // 此情况说明 target 在区间 [i, m-1] 中
+            j = m - 1;
+        else // 找到目标元素，返回其索引
+            return m;
+    }
+    // 未找到目标元素，返回 -1
+    return -1;
+}
+```
+
+### 二分查找插入点
+
+给定一个长度为 n 的有序数组 `nums` 和一个元素 `target` ，数组不存在重复元素。现将 `target` 插入数组 `nums` 中，并保持其有序性。若数组中已存在元素 `target` ，则插入到其左方。请返回插入后 `target` 在数组中的索引。
+
+1. 当数组包含 `target` 时，插入点的索引就是该 `target` 的索引。
+2. 当数组不包含 target 时，插入索引为 i 。
+
+```java
+/* 二分查找插入点（无重复元素） */
+int binarySearchInsertionSimple(int[] nums, int target) {
+    int i = 0, j = nums.length - 1; // 初始化双闭区间 [0, n-1]
+    while (i <= j) {
+        int m = i + (j - i) / 2; // 计算中点索引 m
+        if (nums[m] < target) {
+            i = m + 1; // target 在区间 [m+1, j] 中
+        } else if (nums[m] > target) {
+            j = m - 1; // target 在区间 [i, m-1] 中
+        } else {
+            return m; // 找到 target ，返回插入点 m
+        }
+    }
+    // 未找到 target ，返回插入点 i
+    return i;
+}
+```
+
+数组可能包含重复元素
+
+普通二分查找只能返回其中一个 `target` 的索引，**而无法确定该元素的左边和右边还有多少 `target`**。
+
+- 当 `nums[m] < target` 或 `nums[m] > target` 时，说明还没有找到 `target` ，因此采用普通二分查找的缩小区间操作，**从而使指针 i 和 j 向 `target` 靠近**。
+- 当 `nums[m] == target` 时，说明小于 `target` 的元素在区间 [i,m−1] 中，因此采用 j=m−1 来缩小区间，**从而使指针 j 向小于 `target` 的元素靠近**。
+
+循环完成后，i 指向最左边的 `target` ，j 指向首个小于 `target` 的元素，**因此索引 i 就是插入点**。
+
+```java
+/* 二分查找插入点（存在重复元素） */
+int binarySearchInsertion(int[] nums, int target) {
+    int i = 0, j = nums.length - 1; // 初始化双闭区间 [0, n-1]
+    while (i <= j) {
+        int m = i + (j - i) / 2; // 计算中点索引 m
+        if (nums[m] < target) {
+            i = m + 1; // target 在区间 [m+1, j] 中
+        } else if (nums[m] > target) {
+            j = m - 1; // target 在区间 [i, m-1] 中
+        } else {
+            j = m - 1; // 首个小于 target 的元素在区间 [i, m-1] 中
+        }
+    }
+    // 返回插入点 i
+    return i;
+}
+```
+
+### 二分查找边界
+
+给定一个长度为 n 的有序数组 `nums` ，其中可能包含重复元素。
+
+**查找左边界**
+
+和上一个思路一样
+
+```java
+/* 二分查找最左一个 target */
+int binarySearchLeftEdge(int[] nums, int target) {
+    // 等价于查找 target 的插入点
+    int i = binary_search_insertion.binarySearchInsertion(nums, target);
+    // 未找到 target ，返回 -1
+    if (i == nums.length || nums[i] != target) {
+        return -1;
+    }
+    // 找到 target ，返回索引 i
+    return i;
+}
+```
+
+**查找右边界**
+
+复用查找左边界
+
+```java
+/* 二分查找最右一个 target */
+int binarySearchRightEdge(int[] nums, int target) {
+    // 转化为查找最左一个 target + 1
+    int i = binary_search_insertion.binarySearchInsertion(nums, target + 1);
+    // j 指向最右一个 target ，i 指向首个大于 target 的元素
+    int j = i - 1;
+    // 未找到 target ，返回 -1
+    if (j == -1 || nums[j] != target) {
+        return -1;
+    }
+    // 找到 target ，返回索引 j
+    return j;
+}
+```
+
+![将查找右边界转化为查找左边界](https://www.hello-algo.com/chapter_searching/binary_search_edge.assets/binary_search_right_edge_by_left_edge.png)
+
+**转化为查找元素**
+
+构造一个数组中不存在的元素，用于查找左右边界。
+
+- 查找最左一个 `target` ：可以转化为查找 `target - 0.5` ，并返回指针 i 。
+- 查找最右一个 `target` ：可以转化为查找 `target + 0.5` ，并返回指针 j 。
+
+![将查找边界转化为查找元素](https://www.hello-algo.com/chapter_searching/binary_search_edge.assets/binary_search_edge_by_element.png)
+
 ## 排序
 
 ![Picture2.png](https://pic.leetcode-cn.com/1629483637-tmENTT-Picture2.png)
