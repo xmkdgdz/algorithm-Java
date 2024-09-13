@@ -558,6 +558,8 @@ map.clear();  // 移除所有的键值对
 
 ## 搜索
 
+![多种搜索策略](https://www.hello-algo.com/chapter_searching/searching_algorithm_revisited.assets/searching_algorithms.png)
+
 ### 二分查找
 
 ```java
