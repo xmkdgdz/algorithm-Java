@@ -211,6 +211,10 @@ sites.getLast()
     
 // 迭代元素
 for (String i : sites)
+    
+// res.append(path) ，则是将此 path 对象加入了 res ；后续 path 改变时， res 中的 path 对象也会随之改变，因此无法实现结果记录
+// 正确做法
+res.add(new LinkedList(path))
 ```
 
 - **特点：** 双向链表，元素之间通过指针连接。
@@ -692,4 +696,38 @@ int binarySearchRightEdge(int[] nums, int target) {
 ## 排序
 
 ![Picture2.png](https://pic.leetcode-cn.com/1629483637-tmENTT-Picture2.png)
+
+## 回溯
+
+度优先搜索算法
+
+尝试、回退、剪枝
+
+`state` 表示问题的当前状态，`choices` 表示当前状态下可以做出的选择：
+
+```java
+/* 回溯算法框架 */
+void backtrack(State state, List<Choice> choices, List<State> res) {
+    // 判断是否为解
+    if (isSolution(state)) {
+        // 记录解
+        recordSolution(state, res);
+        // 不再继续搜索
+        return;
+    }
+    // 遍历所有选择
+    for (Choice choice : choices) {
+        // 剪枝：判断选择是否合法
+        if (isValid(state, choice)) {
+            // 尝试：做出选择，更新状态
+            makeChoice(state, choice);
+            backtrack(state, choices, res);
+            // 回退：撤销选择，恢复到之前的状态
+            undoChoice(state, choice);
+        }
+    }
+}
+```
+
+> 多注意回退
 
