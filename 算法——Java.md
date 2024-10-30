@@ -515,6 +515,39 @@ void remove(int num) {
 
 ![二叉搜索树的中序遍历序列](https://www.hello-algo.com/chapter_tree/binary_search_tree.assets/bst_inorder_traversal.png)
 
+## 哈希集合
+
+**HashSet:**
+
+- **特点：** 无序集合，基于HashMap实现。
+- **优点：** 高效的查找和插入操作。
+- **缺点：** 不保证顺序。
+
+**TreeSet:**
+
+- **特点：**TreeSet 是有序集合，底层基于红黑树实现，不允许重复元素。
+- **优点：** 提供自动排序功能，适用于需要按顺序存储元素的场景。
+- **缺点：** 性能相对较差，不允许插入 null 元素。
+
+```java
+Set<String> hashSet = new HashSet<>();
+Set<Integer> treeSet = new TreeSet<>();
+
+sites.add("Google");
+sites.add("Runoob");
+sites.add("Runoob");  // 重复的元素不会被添加
+
+sites.remove("Taobao");  // 删除元素，删除成功返回 true，否则为 false
+
+sites.contains("Taobao");
+
+sites.clear();  
+
+for (String i : sites) {
+    System.out.println(i);
+}
+```
+
 ## 哈希表
 
 ```java
