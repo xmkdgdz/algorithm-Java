@@ -728,7 +728,208 @@ int binarySearchRightEdge(int[] nums, int target) {
 
 ## 排序
 
+理想的排序算法具有以下特性：
+
+- **稳定性**：稳定排序在完成排序后，相等元素在数组中的相对顺序不发生改变。
+
+```yaml
+# 输入数据是按照姓名排序好的
+# (name, age)
+  ('A', 19)
+  ('B', 18)
+  ('C', 21)
+  ('D', 19)
+  ('E', 23)
+
+# 假设使用非稳定排序算法按年龄排序列表，
+# 结果中 ('D', 19) 和 ('A', 19) 的相对位置改变，
+# 输入数据按姓名排序的性质丢失
+  ('B', 18)
+  ('D', 19)
+  ('A', 19)
+  ('C', 21)
+  ('E', 23)
+```
+
+- **就地性**：无须借助额外的辅助数组，从而节省内存。通常情况下，原地排序的数据搬运操作较少，运行速度也更快。
+- **自适应性**：能够利用输入数据已有的顺序信息来减少计算量，达到更优的时间效率。自适应排序算法的最佳时间复杂度通常优于平均
+- **是否基于比较**：基于比较的排序依赖比较运算符（<、=、>）来判断元素的相对顺序，从而排序整个数组，理论最优时间复杂度为 O(nlog⁡n) 。而非比较排序不使用比较运算符，时间复杂度可达 O(n) ，但其通用性相对较差。
+
 ![Picture2.png](https://pic.leetcode-cn.com/1629483637-tmENTT-Picture2.png)
+
+### 冒泡排序（bubble sort）
+
+从数组最左端开始向右遍历，依次比较相邻元素大小，如果“左元素 > 右元素”就交换二者。遍历完成后，最大的元素会被移动到数组的最右端。每次都成功排好一个元素，所以需要循环n-1轮，每轮比较n-i个数。
+
+```java
+/* 冒泡排序 */
+void bubbleSort(int[] nums) {
+    // 外循环：未排序区间为 [0, i]
+    for (int i = nums.length - 1; i > 0; i--) {
+        // 内循环：将未排序区间 [0, i] 中的最大元素交换至该区间的最右端
+        for (int j = 0; j < i; j++) {
+            if (nums[j] > nums[j + 1]) {
+                // 交换 nums[j] 与 nums[j + 1]
+                int tmp = nums[j];
+                nums[j] = nums[j + 1];
+                nums[j + 1] = tmp;
+            }
+        }
+    }
+}
+```
+
+**效率优化**：如果某轮“冒泡”中没有执行任何交换操作，说明数组已经完成排序，可直接返回结果。因此，可以增加一个标志位 `flag` 来监测这种情况，一旦出现就立即返回。
+
+### 快速排序（quick sort）
+
+基于分治策略。
+
+快速排序的核心操作是“哨兵划分”，其目标是：选择数组中的某个元素作为“基准数”，将所有小于基准数的元素移到其左侧，而大于基准数的元素移到其右侧。
+
+1. 选取数组最左端元素作为基准数，初始化两个指针 `i` 和 `j` 分别指向数组的两端。
+2. 设置一个循环，在每轮中使用 `i`（`j`）分别寻找第一个比基准数大（小）的元素，然后交换这两个元素。
+3. 循环执行步骤 `2.` ，直到 `i` 和 `j` 相遇时停止，最后将基准数交换至两个子数组的分界线。（分界线的数一定小于基准数）
+
+哨兵划分完成后，原数组被划分成三部分：左子数组、基准数、右子数组，且满足“左子数组任意元素 ≤ 基准数 ≤ 右子数组任意元素”。因此，我们接下来只需对这两个子数组进行排序。
+
+> 哨兵划分的实质是将一个较长数组的排序问题简化为两个较短数组的排序问题。
+
+```java
+/* 元素交换 */
+void swap(int[] nums, int i, int j) {
+    int tmp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = tmp;
+}
+
+/* 哨兵划分 */
+int partition(int[] nums, int left, int right) {
+    // 以 nums[left] 为基准数
+    int i = left, j = right;
+    while (i < j) {
+        while (i < j && nums[j] >= nums[left])
+            j--;          // 从右向左找首个小于基准数的元素
+        while (i < j && nums[i] <= nums[left])
+            i++;          // 从左向右找首个大于基准数的元素
+        swap(nums, i, j); // 交换这两个元素
+    }
+    swap(nums, i, left);  // 将基准数交换至两子数组的分界线
+    return i;             // 返回基准数的索引
+}
+
+/* 快速排序 */
+void quickSort(int[] nums, int left, int right) {
+    // 子数组长度为 1 时终止递归
+    if (left >= right)
+        return;
+    // 哨兵划分
+    int pivot = partition(nums, left, right);
+    // 递归左子数组、右子数组
+    quickSort(nums, left, pivot - 1);
+    quickSort(nums, pivot + 1, right);
+}
+```
+
+**基准数优化**:随机选取一个元素作为基准数。或者为了进一步改进，我们可以在数组中选取三个候选元素（通常为数组的首、尾、中点元素），并将这三个候选元素的**中位数**作为基准数。
+
+```java
+/* 选取三个候选元素的中位数 */
+int medianThree(int[] nums, int left, int mid, int right) {
+    int l = nums[left], m = nums[mid], r = nums[right];
+    if ((l <= m && m <= r) || (r <= m && m <= l))
+        return mid; // m 在 l 和 r 之间
+    if ((m <= l && l <= r) || (r <= l && l <= m))
+        return left; // l 在 m 和 r 之间
+    return right;
+}
+
+/* 哨兵划分（三数取中值） */
+int partition(int[] nums, int left, int right) {
+    // 选取三个候选元素的中位数
+    int med = medianThree(nums, left, (left + right) / 2, right);
+    // 将中位数交换至数组最左端
+    swap(nums, left, med);
+    ...
+}
+```
+
+**尾递归优化**：在某些输入下，快速排序可能占用空间较多。例如在输入数组完全倒序时，递归深度会达到 N，即 最差空间复杂度 为 O(N)。我们可以在每轮哨兵排序完成后，比较两个子数组的长度，**仅对较短的子数组进行递归**。由于较短子数组的长度不会超过 n/2 ，因此这种方法能确保递归深度不超过 log⁡n ，从而将最差空间复杂度优化至 O(log⁡n) 。
+
+```java
+/* 快速排序（尾递归优化） */
+void quickSort(int[] nums, int left, int right) {
+    // 子数组长度为 1 时终止
+    while (left < right) {
+        // 哨兵划分操作
+        int pivot = partition(nums, left, right);
+        // 对两个子数组中较短的那个执行快速排序
+        if (pivot - left < right - pivot) {
+            quickSort(nums, left, pivot - 1); // 递归排序左子数组
+            left = pivot + 1; // 剩余未排序区间为 [pivot + 1, right]
+        } else {
+            quickSort(nums, pivot + 1, right); // 递归排序右子数组
+            right = pivot - 1; // 剩余未排序区间为 [left, pivot - 1]
+        }
+    }
+}
+```
+
+### 归并排序（merge sort）
+
+是一种基于分治策略的排序算法。
+
+1. **划分阶段**：通过递归不断地将数组从中点处分开，将长数组的排序问题转换为短数组的排序问题。
+2. **合并阶段**：当子数组长度为 1 时终止划分，开始合并，持续地将左右两个较短的有序数组合并为一个较长的有序数组，直至结束。
+
+![归并排序的划分与合并阶段](https://www.hello-algo.com/chapter_sorting/merge_sort.assets/merge_sort_overview.png)
+
+```java
+/* 合并左子数组和右子数组 */
+void merge(int[] nums, int left, int mid, int right) {
+    // 左子数组区间为 [left, mid], 右子数组区间为 [mid+1, right]
+    // 创建一个临时数组 tmp ，用于存放合并后的结果
+    int[] tmp = new int[right - left + 1];
+    // 初始化左子数组和右子数组的起始索引
+    int i = left, j = mid + 1, k = 0;
+    // 当左右子数组都还有元素时，进行比较并将较小的元素复制到临时数组中
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j])
+            tmp[k++] = nums[i++];
+        else
+            tmp[k++] = nums[j++];
+    }
+    // 将左子数组和右子数组的剩余元素复制到临时数组中
+    while (i <= mid) {
+        tmp[k++] = nums[i++];
+    }
+    while (j <= right) {
+        tmp[k++] = nums[j++];
+    }
+    // 将临时数组 tmp 中的元素复制回原数组 nums 的对应区间
+    for (k = 0; k < tmp.length; k++) {
+        nums[left + k] = tmp[k];
+    }
+}
+
+/* 归并排序 */
+void mergeSort(int[] nums, int left, int right) {
+    // 终止条件
+    if (left >= right)
+        return; // 当子数组长度为 1 时终止递归
+    // 划分阶段
+    int mid = left + (right - left) / 2; // 计算中点
+    mergeSort(nums, left, mid); // 递归左子数组
+    mergeSort(nums, mid + 1, right); // 递归右子数组
+    // 合并阶段
+    merge(nums, left, mid, right);
+}
+```
+
+对于链表，归并排序相较于其他排序算法具有显著优势，**可以将链表排序任务的空间复杂度优化至 O(1)** 。
+
+- **划分阶段**：可以使用“迭代”替代“递归”来实现链表划分工作，从而省去递归使用的栈帧空间。
+- **合并阶段**：在链表中，节点增删操作仅需改变引用（指针）即可实现，因此合并阶段（将两个短有序链表合并为一个长有序链表）无须创建额外链表。
 
 ## 回溯
 
@@ -763,4 +964,11 @@ void backtrack(State state, List<Choice> choices, List<State> res) {
 ```
 
 > 多注意回退
+
+## 分治
+
+分治通常基于递归实现，包括“分”和“治”两个步骤。
+
+1. **分（划分阶段）**：递归地将原问题分解为两个或多个子问题，直至到达最小子问题时终止。
+2. **治（合并阶段）**：从已知解的最小子问题开始，从底至顶地将子问题的解进行合并，从而构建出原问题的解。
 
