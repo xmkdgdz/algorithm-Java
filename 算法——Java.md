@@ -75,6 +75,9 @@ int compareToIgnoreCase(String str); // 不考虑大小写
 String replace(char oldChar, char newChar);
 
 char[] toCharArray();
+
+String substring(int beginIndex)
+String substring(int beginIndex, int endIndex)    
 ```
 
 ![img](https://www.runoob.com/wp-content/uploads/2013/12/java-string-1-2020-12-01.png)
