@@ -77,7 +77,12 @@ String replace(char oldChar, char newChar);
 char[] toCharArray();
 
 String substring(int beginIndex)
-String substring(int beginIndex, int endIndex)    
+String substring(int beginIndex, int endIndex) 
+    
+// 转化为字符串
+String str = String.valueOf(number); // 任何基本数据类型或对象
+Integer.toString(number); // 整数
+
 ```
 
 ![img](https://www.runoob.com/wp-content/uploads/2013/12/java-string-1-2020-12-01.png)
