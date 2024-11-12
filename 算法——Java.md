@@ -523,7 +523,7 @@ void remove(int num) {
 
 ![二叉搜索树的中序遍历序列](https://www.hello-algo.com/chapter_tree/binary_search_tree.assets/bst_inorder_traversal.png)
 
-## 哈希集合
+## 哈希集合(Set)
 
 **HashSet:**
 
@@ -556,7 +556,7 @@ for (String i : sites) {
 }
 ```
 
-## 哈希表
+## 哈希表(Map)
 
 ```java
 /* 初始化哈希表 */
