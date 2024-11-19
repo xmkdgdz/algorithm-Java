@@ -68,7 +68,7 @@ fs = String.format("浮点型变量的值为 " +
 boolean equals(Object anObject);
     
 // 按字典顺序比较两个字符串
-int compareTo(String anotherString);
+int compareTo(String anotherString); // 正数：当前对象大
 int compareToIgnoreCase(String str); // 不考虑大小写
     
 // 返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的
@@ -97,7 +97,7 @@ Integer.toString(number); // 整数
 ```java
 public class RunoobTest{
     public static void main(String args[]){
-        StringBuilder sb = new StringBuilder(10);
+        StringBuilder sb = new StringBuilder(10); // 也可以不指定大小
         sb.append("Runoob.."); 
         System.out.println(sb); // Runoob..
         sb.append("!");
@@ -107,6 +107,7 @@ public class RunoobTest{
         sb.delete(5,8);
         System.out.println(sb); // RunooJava!
         sb.deleteCharAt(2); // 删除某个
+        sb.toString();
     }
 }
 ```
@@ -999,3 +1000,10 @@ void backtrack(State state, List<Choice> choices, List<State> res) {
 1. 思考每轮的决策，定义状态，从而得到 dp 表
 2. 找出最优子结构，进而推导出状态转移方程
 3. 确定边界条件和状态转移顺序
+
+## 贪心
+
+在问题的每个决策阶段，都选择当前看起来最优的选择，即贪心地做出局部最优的决策，以期获得全局最优解。
+
+- **贪心选择性质**：只有当局部最优选择始终可以导致全局最优解时，贪心算法才能保证得到最优解。
+- **最优子结构**：原问题的最优解包含子问题的最优解。
