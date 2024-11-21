@@ -27,7 +27,7 @@ int[] partialCopy = Arrays.copyOfRange(numbers, 1, 4);  // 复制部分数组 [1
 Arrays.fill(array, 0);  // 用 0 填充整个数组
 Arrays.fill(array, 1, 4, 5);  // 从索引 1 到 4（不包括4）填充 5
 
-// 排序数组
+// 排序数组（直接修改原数组）
 Arrays.sort(array);  // 对数组进行升序排序
 Arrays.sort(array, Collections.reverseOrder()); // 降序排序
 ```
