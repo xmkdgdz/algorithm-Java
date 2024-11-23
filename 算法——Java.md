@@ -330,6 +330,87 @@ int size = maxHeap.size();
 boolean isEmpty = maxHeap.isEmpty();
 ```
 
+## 哈希集合(Set)
+
+**HashSet:**
+
+- **特点：** 无序集合，基于HashMap实现。
+- **优点：** 高效的查找和插入操作。
+- **缺点：** 不保证顺序。
+
+**TreeSet:**
+
+- **特点：**TreeSet 是有序集合，底层基于红黑树实现，不允许重复元素。
+- **优点：** 提供自动排序功能，适用于需要按顺序存储元素的场景。
+- **缺点：** 性能相对较差，不允许插入 null 元素。
+
+```java
+Set<String> hashSet = new HashSet<>();
+Set<Integer> treeSet = new TreeSet<>(); // 正序
+
+sites.add("Google");
+sites.add("Runoob");
+sites.add("Runoob");  // 重复的元素不会被添加
+
+sites.remove("Taobao");  // 删除元素，删除成功返回 true，否则为 false
+
+sites.contains("Taobao");
+
+sites.clear();  
+
+for (String i : sites) {
+    System.out.println(i);
+}
+
+treeSet.first()
+treeSet.last()
+```
+
+## 哈希表(Map)
+
+```java
+/* 初始化哈希表 */
+Map<Integer, String> map = new HashMap<>();
+Map<Integer, String> map = new TreeMap<>(); // 基于红黑树实现的，自动排序
+Map<Integer, String> map = new LinkedHashMap<>(); // 有序哈希表，维护了插入时的顺序
+Map<Integer, String> map = new Hashtable<>(); // 线程安全，不允许 null 值
+
+/* 添加操作 */
+// 在哈希表中添加键值对 (key, value)
+map.put(12836, "小哈");
+map.put(15937, "小啰");
+map.put(16750, "小算");
+map.put(13276, "小法");
+map.put(10583, "小鸭");
+
+/* 查询操作 */
+// 向哈希表中输入键 key ，得到值 value
+String name = map.get(15937); // 不包含返回 null
+
+/* 删除操作 */
+// 在哈希表中删除键值对 (key, value)
+map.remove(10583);
+
+boolean hasName = map.containsKey(12836);  // 返回 true
+boolean hasValue = map.containsValue("小哈");  // 返回 true
+
+/* 遍历哈希表 */
+// 遍历键值对 key->value
+for (Map.Entry <Integer, String> kv: map.entrySet()) {
+    System.out.println(kv.getKey() + " -> " + kv.getValue());
+}
+// 单独遍历键 key
+for (int key: map.keySet()) {
+    System.out.println(key);
+}
+// 单独遍历值 value
+for (String val: map.values()) {
+    System.out.println(val);
+}
+
+map.clear();  // 移除所有的键值对
+```
+
 ## 树
 
 ### 二叉树
@@ -524,82 +605,115 @@ void remove(int num) {
 
 ![二叉搜索树的中序遍历序列](https://www.hello-algo.com/chapter_tree/binary_search_tree.assets/bst_inorder_traversal.png)
 
-## 哈希集合(Set)
+## 堆
 
-**HashSet:**
+堆（heap）是一种满足特定条件的完全二叉树。
 
-- **特点：** 无序集合，基于HashMap实现。
-- **优点：** 高效的查找和插入操作。
-- **缺点：** 不保证顺序。
+![小顶堆与大顶堆](https://www.hello-algo.com/chapter_heap/heap.assets/min_heap_and_max_heap.png)
 
-**TreeSet:**
+- 我们将二叉树的根节点称为“堆顶”，将底层最靠右的节点称为“堆底”。
 
-- **特点：**TreeSet 是有序集合，底层基于红黑树实现，不允许重复元素。
-- **优点：** 提供自动排序功能，适用于需要按顺序存储元素的场景。
-- **缺点：** 性能相对较差，不允许插入 null 元素。
+**堆通常用于实现优先队列**，优先队列见上文。
+
+### 堆的实现
+
+![堆的表示与存储](https://www.hello-algo.com/chapter_heap/heap.assets/representation_of_heap.png)
 
 ```java
-Set<String> hashSet = new HashSet<>();
-Set<Integer> treeSet = new TreeSet<>();
+//  堆的存储与表示
 
-sites.add("Google");
-sites.add("Runoob");
-sites.add("Runoob");  // 重复的元素不会被添加
+/* 获取左子节点的索引 */
+int left(int i) {
+    return 2 * i + 1;
+}
+/* 获取右子节点的索引 */
+int right(int i) {
+    return 2 * i + 2;
+}
+/* 获取父节点的索引 */
+int parent(int i) {
+    return (i - 1) / 2; // 向下整除
+}
 
-sites.remove("Taobao");  // 删除元素，删除成功返回 true，否则为 false
 
-sites.contains("Taobao");
+/* 访问堆顶元素 */
+int peek() {
+    return maxHeap.get(0);
+}
 
-sites.clear();  
 
-for (String i : sites) {
-    System.out.println(i);
+/* 元素入堆 */
+void push(int val) {
+    // 添加节点
+    maxHeap.add(val);
+    // 从底至顶堆化
+    siftUp(size() - 1);
+}
+/* 从节点 i 开始，从底至顶堆化 */
+void siftUp(int i) {
+    while (true) {
+        // 获取节点 i 的父节点
+        int p = parent(i);
+        // 当“越过根节点”或“节点无须修复”时，结束堆化
+        if (p < 0 || maxHeap.get(i) <= maxHeap.get(p))
+            break;
+        // 交换两节点
+        swap(i, p);
+        // 循环向上堆化
+        i = p;
+    }
+}
+
+
+/* 元素出堆 */
+int pop() {
+    // 判空处理
+    if (isEmpty())
+        throw new IndexOutOfBoundsException();
+    // 交换根节点与最右叶节点（交换首元素与尾元素）
+    swap(0, size() - 1);
+    // 删除节点
+    int val = maxHeap.remove(size() - 1);
+    // 从顶至底堆化
+    siftDown(0);
+    // 返回堆顶元素
+    return val;
+}
+/* 从节点 i 开始，从顶至底堆化 */
+void siftDown(int i) {
+    while (true) {
+        // 判断节点 i, l, r 中值最大的节点，记为 ma
+        int l = left(i), r = right(i), ma = i;
+        if (l < size() && maxHeap.get(l) > maxHeap.get(ma))
+            ma = l;
+        if (r < size() && maxHeap.get(r) > maxHeap.get(ma))
+            ma = r;
+        // 若节点 i 最大或索引 l, r 越界，则无须继续堆化，跳出
+        if (ma == i)
+            break;
+        // 交换两节点
+        swap(i, ma);
+        // 循环向下堆化
+        i = ma;
+    }
 }
 ```
 
-## 哈希表(Map)
+### 建堆操作
+
+1. 将列表所有元素原封不动地添加到堆中，此时堆的性质尚未得到满足。
+2. 倒序遍历堆（层序遍历的倒序），依次对每个非叶节点执行“从顶至底堆化”。
 
 ```java
-/* 初始化哈希表 */
-Map<Integer, String> map = new HashMap<>();
-Map<Integer, String> map = new TreeMap<>(); // 基于红黑树实现的，自动排序
-Map<Integer, String> map = new LinkedHashMap<>(); // 有序哈希表，维护了插入时的顺序
-Map<Integer, String> map = new Hashtable<>(); // 线程安全，不允许 null 值
-
-/* 添加操作 */
-// 在哈希表中添加键值对 (key, value)
-map.put(12836, "小哈");
-map.put(15937, "小啰");
-map.put(16750, "小算");
-map.put(13276, "小法");
-map.put(10583, "小鸭");
-
-/* 查询操作 */
-// 向哈希表中输入键 key ，得到值 value
-String name = map.get(15937); // 不包含返回 null
-
-/* 删除操作 */
-// 在哈希表中删除键值对 (key, value)
-map.remove(10583);
-
-boolean hasName = map.containsKey(12836);  // 返回 true
-boolean hasValue = map.containsValue("小哈");  // 返回 true
-
-/* 遍历哈希表 */
-// 遍历键值对 key->value
-for (Map.Entry <Integer, String> kv: map.entrySet()) {
-    System.out.println(kv.getKey() + " -> " + kv.getValue());
+/* 构造方法，根据输入列表建堆 */
+MaxHeap(List<Integer> nums) {
+    // 将列表元素原封不动添加进堆
+    maxHeap = new ArrayList<>(nums);
+    // 堆化除叶节点以外的其他所有节点
+    for (int i = parent(size() - 1); i >= 0; i--) {
+        siftDown(i);
+    }
 }
-// 单独遍历键 key
-for (int key: map.keySet()) {
-    System.out.println(key);
-}
-// 单独遍历值 value
-for (String val: map.values()) {
-    System.out.println(val);
-}
-
-map.clear();  // 移除所有的键值对
 ```
 
 ## 搜索
