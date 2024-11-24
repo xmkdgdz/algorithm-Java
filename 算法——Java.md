@@ -409,6 +409,11 @@ for (String val: map.values()) {
 }
 
 map.clear();  // 移除所有的键值对
+
+// 指定初始容量，负载因子，以及是否按访问顺序排序
+// HashMap 和 LinkedHashMap 默认的负载因子是 0.75。
+// 默认为按插入顺序
+LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder);
 ```
 
 ## 树
