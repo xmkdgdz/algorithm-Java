@@ -500,6 +500,8 @@ void postOrder(TreeNode root) {
 
 ### 二叉搜索树（binary search tree）
 
+二叉排序树、二叉查找树
+
 ![二叉搜索树](https://www.hello-algo.com/chapter_tree/binary_search_tree.assets/binary_search_tree.png)
 
 1. 对于根节点，左子树中所有节点的值 < 根节点的值 < 右子树中所有节点的值。
