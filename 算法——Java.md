@@ -30,6 +30,9 @@ Arrays.fill(array, 1, 4, 5);  // 从索引 1 到 4（不包括4）填充 5
 // 排序数组（直接修改原数组）
 Arrays.sort(array);  // 对数组进行升序排序
 Arrays.sort(array, Collections.reverseOrder()); // 降序排序
+
+// 比较
+Arrays.equals(a, b);
 ```
 
 内存地址连续，可以存储固定大小的相同类型的元素
