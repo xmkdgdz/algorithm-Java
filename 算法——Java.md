@@ -56,6 +56,9 @@ String s4 = new String("Runoob");   // String 对象创建
 String s5 = new String("Runoob");   // String 对象创建
 s4 != s5;                           // 不同对象
 
+s.length();
+s.charAt(i);
+
 // 连接字符串
 string1.concat(string2);
 string1 + string2 + "!";
