@@ -20,8 +20,11 @@ for (int i = 0; i < array.length; i++)
 for (int i : array)
     
 // 复制数组
+// 会改变 copy 的引用，指向新的数组
 int[] copy = Arrays.copyOf(numbers, numbers.length);  // 复制整个数组
 int[] partialCopy = Arrays.copyOfRange(numbers, 1, 4);  // 复制部分数组 [1, 4)
+// 不改变 copy 数组的引用，copy 仍然指向原来的数组。所以参数可以传出到外部。
+System.arraycopy(nums, int srcPos, copy, int destPos,, int length);
 
 // 填充数组
 Arrays.fill(array, 0);  // 用 0 填充整个数组
