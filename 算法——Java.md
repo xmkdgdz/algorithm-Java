@@ -392,6 +392,11 @@ map.put(16750, "小算");
 map.put(13276, "小法");
 map.put(10583, "小鸭");
 
+// 如果该键不存在，它将插入一个新的键值对，返回 null。如果键已经存在，它不会做任何修改，并返回原有的值。
+map.putIfAbsent(key, value);
+// 接受一个 Function 作为参数，用于计算新值，键存不存在都会返回值
+map.computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction);
+
 /* 查询操作 */
 // 向哈希表中输入键 key ，得到值 value
 String name = map.get(15937); // 不包含返回 null
