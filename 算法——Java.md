@@ -1142,3 +1142,113 @@ void backtrack(State state, List<Choice> choices, List<State> res) {
 
 - **贪心选择性质**：只有当局部最优选择始终可以导致全局最优解时，贪心算法才能保证得到最优解。
 - **最优子结构**：原问题的最优解包含子问题的最优解。
+
+## 图
+
+图由顶点(vertex)和边(edge)组成。
+* 图 G = {V, E}
+* 顶点 V = {1, 2, 3, 4, 5}
+* 边 E = {(1,2), (1,3), (1,5), (2,4), (2,5), (4,5)}
+
+术语：
+* 邻接（adjacency）：当两顶点之间存在边相连时，称这两顶点“邻接”。
+* 路径（path）：从顶点 A 到顶点 B 经过的边构成的序列被称为从 A 到 B 的“路径”。
+* 度（degree）：一个顶点拥有的边数。对于有向图，入度（in-degree）表示有多少条边指向该顶点，出度（out-degree）表示有多少条边从该顶点指出。
+
+分类：
+* 无向、有向
+* 连通、非连通（存在顶点不可达）
+* 有权图
+
+图的表示：
+
+1. 邻接矩阵
+![](https://www.hello-algo.com/chapter_graph/graph.assets/adjacency_matrix.png)
+
+2. 邻接表
+![](https://www.hello-algo.com/chapter_graph/graph.assets/adjacency_list.png)
+
+|                     | 邻接矩阵               | 邻接表（链表）      | 邻接表（哈希表）    |
+|-------------------------|-------------------------------------------|------------------------------------------------------|---------------------------------------------------|
+| 判断是否邻接 | O(1)              | O(n)           | O(1)                 |
+| 添加边              | O(1)                                 | O(1)                  | O(1)         |
+| 删除边               | O(1)                   | O(n)                       | O(1)                 |
+| 添加顶点              | O(n)                                 | O(1)                  | O(1)         |
+| 删除顶带你              | O(n^2)                                 | O(n + m)                  | O(n)         |
+| 初始化时间          | O(n^2)           | O(n + m)             | O(n + m)         |
+| 内存空间占用             | O(n^2)          | O(n + m)         | O(n + m)          |
+
+### BFS
+
+广度优先遍历，始终优先访问距离最近的顶点，并一层层向外扩张。
+
+队列实现。
+
+``` java
+/* 广度优先遍历 */
+// 使用邻接表来表示图，以便获取指定顶点的所有邻接顶点
+List<Vertex> graphBFS(GraphAdjList graph, Vertex startVet) {
+    // 顶点遍历序列
+    List<Vertex> res = new ArrayList<>();
+    // 哈希集合，用于记录已被访问过的顶点
+    Set<Vertex> visited = new HashSet<>();
+    visited.add(startVet);
+    // 队列用于实现 BFS
+    Queue<Vertex> que = new LinkedList<>();
+    que.offer(startVet);
+    // 以顶点 vet 为起点，循环直至访问完所有顶点
+    while (!que.isEmpty()) {
+        Vertex vet = que.poll(); // 队首顶点出队
+        res.add(vet);            // 记录访问顶点
+        // 遍历该顶点的所有邻接顶点
+        for (Vertex adjVet : graph.adjList.get(vet)) {
+            if (visited.contains(adjVet))
+                continue;        // 跳过已被访问的顶点
+            que.offer(adjVet);   // 只入队未访问的顶点
+            visited.add(adjVet); // 标记该顶点已被访问
+        }
+    }
+    // 返回顶点遍历序列
+    return res;
+}
+```
+
+时间复杂度：O(V+E)
+
+空间复杂度：O(V)
+
+### DFS
+
+深度优先遍历是一种优先走到底、无路可走再回头的遍历方式。
+
+基于递归。
+
+``` java
+/* 深度优先遍历辅助函数 */
+void dfs(GraphAdjList graph, Set<Vertex> visited, List<Vertex> res, Vertex vet) {
+    res.add(vet);     // 记录访问顶点
+    visited.add(vet); // 标记该顶点已被访问
+    // 遍历该顶点的所有邻接顶点
+    for (Vertex adjVet : graph.adjList.get(vet)) {
+        if (visited.contains(adjVet))
+            continue; // 跳过已被访问的顶点
+        // 递归访问邻接顶点
+        dfs(graph, visited, res, adjVet);
+    }
+}
+
+/* 深度优先遍历 */
+// 使用邻接表来表示图，以便获取指定顶点的所有邻接顶点
+List<Vertex> graphDFS(GraphAdjList graph, Vertex startVet) {
+    // 顶点遍历序列
+    List<Vertex> res = new ArrayList<>();
+    // 哈希集合，用于记录已被访问过的顶点
+    Set<Vertex> visited = new HashSet<>();
+    dfs(graph, visited, res, startVet);
+    return res;
+}
+```
+
+时间复杂度：O(V+E)
+
+空间复杂度：O(V)
