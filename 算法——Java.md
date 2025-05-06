@@ -110,6 +110,7 @@ public class RunoobTest{
         sb.append("Runoob.."); 
         System.out.println(sb); // Runoob..
         sb.append("!");
+        sb.append('!');
         System.out.println(sb); // Runoob..!
         sb.insert(8, "Java");
         System.out.println(sb); // Runoob..Java!
